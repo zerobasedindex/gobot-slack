@@ -5,6 +5,10 @@ dependencies:
   override:
     - $HOME/go_appengine/goapp get github.com/PuerkitoBio/goquery
 
+test:
+  override:
+    - echo "skipping"
+
 deployment:
   appengine:
     branch: master
