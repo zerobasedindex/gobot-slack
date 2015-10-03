@@ -57,13 +57,16 @@ func Payup(c appengine.Context, p []string, w io.Writer) {
 		due[names[i]] = due[names[i]] + prices[i]
 	}
 
-	for key, value := range due {
-		due[key] = value + fees/float64(len(due))
-	}
+	// for key, value := range due {
+	// 	due[key] = value + fees/float64(len(due))
+	// }
 
-	fmt.Fprintf(w, "Well then, here we go. Fees, taxes, and tip evenly divided across labels:```")
+	feePerPerson := fees / float64(len(due))
+
+	fmt.Fprintf(w, "Well then, here we go. Fees, taxes, and tip evenly divided across labels:\n\n")
 	for key, value := range due {
-		fmt.Fprintf(w, "%v: $%.2f\n", key, value)
+		fmt.Fprintf(w, "*%v*: $%.2f + $%.2f = *$%.2f*\n", key, value, feePerPerson, value+feePerPerson)
 	}
-	fmt.Fprintf(w, "```")
+	fmt.Fprintf(w, "\n_Total Taxes, Fees, and Tip: $%.2f, Per label: $%.2f_", fees, feePerPerson)
+	// fmt.Fprintf(w, "```")
 }
