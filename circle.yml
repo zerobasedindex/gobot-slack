@@ -3,7 +3,7 @@ dependencies:
     - curl -o $HOME/appengine.zip https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.27.zip
     - unzip -q -d $HOME $HOME/appengine.zip
   override:
-  	- $HOME/go_appengine/goapp get github.com/PuerkitoBio/goquery
+    - $HOME/go_appengine/goapp get github.com/PuerkitoBio/goquery
 
 deployment:
   appengine:
