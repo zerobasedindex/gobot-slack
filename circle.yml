@@ -13,4 +13,4 @@ deployment:
   appengine:
     branch: master
     commands:
-      - $HOME/go_appengine/appcfg.py update $HOME/gobot-slack
+      - $HOME/go_appengine/appcfg.py update --oauth2_access_token=$OAUTH_ACCESS_TOKEN --oauth2_refresh_token=$OAUTH_REFRESH_TOKEN $HOME/gobot-slack
