@@ -13,4 +13,4 @@ deployment:
   appengine:
     branch: master
     commands:
-      - $HOME/go_appengine/appcfg.py update --noauth_local_webserver --no_cookies $HOME/gobot-slack
+      - $HOME/go_appengine/appcfg.py update $HOME/gobot-slack
