@@ -8,13 +8,20 @@ import (
 	"io"
 	"strconv"
 	"strings"
+	"net/http"
 )
 
 func Payup(c appengine.Context, p []string, w io.Writer) {
 	link := p[0]
 	link = link[1 : len(link)-1]
 
-	client := urlfetch.Client(c)
+	// client := urlfetch.Client(c)
+	client := &http.Client{
+		Transport: &urlfetch.Transport{
+			Context: c,
+			AllowInvalidServerCertificate: true,
+        },
+    }
 	resp, err := client.Get(link)
 	if err != nil {
 		fmt.Fprintf(w, "Error getting URL: %v %v", link, err)
@@ -34,8 +41,8 @@ func Payup(c appengine.Context, p []string, w io.Writer) {
 		}
 	})
 
-	doc.Find("#order-confirmation-page").Find("tbody").Find("tr").Find("strong").Each(func(i int, s *goquery.Selection) {
-		names = append(names, strings.TrimSpace(s.Text()))
+	doc.Find("#order-confirmation-page").Find("tbody").Find("tr").Find("li:contains('label for')").Each(func(i int, s *goquery.Selection) {
+		names = append(names, strings.TrimSpace(s.Find("strong").First().Text()))
 	})
 
 	fees := float64(0)
@@ -68,5 +75,5 @@ func Payup(c appengine.Context, p []string, w io.Writer) {
 		fmt.Fprintf(w, "*%v*: $%.2f + $%.2f = *$%.2f*\n", key, value, feePerPerson, value+feePerPerson)
 	}
 	fmt.Fprintf(w, "\n_Total Taxes, Fees, and Tip: $%.2f, Per label: $%.2f_", fees, feePerPerson)
-	// fmt.Fprintf(w, "```")
+	fmt.Fprintf(w, "\n_Calculations do not include credit, adjust accordingly_")
 }
